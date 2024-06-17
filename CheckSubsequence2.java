@@ -57,15 +57,22 @@ import java.util.Scanner;
             }
             System.out.println("Characters Missed: None");
         } else {
-            // If not all characters of child are found in parent
             System.out.println("Characters Found: ");
             for (Map.Entry<Character, Integer> entry : foundChars.entrySet()) {
                 System.out.println(entry.getKey() + " : Freq = " + entry.getValue());
             }
-            System.out.println("Characters Missed: ");
+            // If not all characters of child are found in parent
+            foundChars.clear();
+
+            // Store the characters that were missed
             for (int k = j; k < child.length(); k++) {
                 char c = child.charAt(k);
-                System.out.println(c + " : Freq = " + 1);
+                foundChars.put(c, foundChars.getOrDefault(c, 0) + 1);
+            }
+
+            System.out.println("Characters Missed: ");
+            for (Map.Entry<Character, Integer> entry : foundChars.entrySet()) {
+                System.out.println(entry.getKey() + " : Freq = " + entry.getValue());
             }
         }
     }
