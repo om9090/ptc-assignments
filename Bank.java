@@ -156,17 +156,18 @@ public class Bank {
         String account[] = new String[4];
         try{    
             // Get account details
-            System.out.println("Enter your name:");
-            String name = sc.nextLine();
-
             System.out.println("Enter your age:");
-            int age = sc.nextInt();
-            sc.nextLine(); // Consume the newline left-over
+            Integer age = sc.nextInt();
             if (age < 10) {
                 throw new Exception("Age should be greater than 10");
             } else if (age > 100) {
                 throw new Exception("Age should be less than 100");
             }
+            sc.nextLine();
+            
+            System.out.println("Enter your name:");
+            String name = sc.nextLine();
+
 
             System.out.println("Enter your address:");
             String address = sc.nextLine();
