@@ -1,20 +1,40 @@
+/**
+ * %W% %E% Om Deshmukh
+ *
+ * Copyright (c) 1993-1996 XYZ, Inc. All Rights Reserved.
+ * 
+ * PURPOSE OF THE FOLLOWING PROGRAM IS TO IMPLEMENT A BANKING SYSTEM
+ * WHICH WILL ALLOW USERS TO CREATE ACCOUNTS, DEPOSIT, WITHDRAW, TRANSFER
+ * AMOUNTS, CHECK BALANCE, UPDATE ACCOUNT DETAILS, DELETE ACCOUNT, DISPLAY
+ *
+ */
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Bank {
-    private int accountNumber;
-    static Scanner sc = new Scanner(System.in);
-    Vector<String[]> accountDetails = new Vector<>();
-    Vector<Integer> accountBalance = new Vector<>();
-    Vector<Vector<String>> transactionHistory = new Vector<>();
+/**
+ * Bank class is the main class which will be used to implement the banking system
+ *
+ * @version 1.0 20 Jun 2024
+ * @author Om Deshmukh
+ */
 
+public class Bank {
+    /* Account Number to be used in different methods */
+    private int accountNumber;
+    static Scanner sc = new Scanner(System.in);                 // Scanner object to take input from user
+    Vector<String[]> accountDetails = new Vector<>();           // Vector to store account details
+    Vector<Integer> accountBalance = new Vector<>();            // Vector to store account balance
+    Vector<Vector<String>> transactionHistory = new Vector<>(); // Vector to store transaction history
+
+    // Method to create account
     public void createAccount(){
         try{
+            // Get account details
             String[] detailStrings = setAccountDetails();
 
-            accountDetails.add(detailStrings);
-            accountBalance.add(0);
-            transactionHistory.add(new Vector<String>());
+            accountDetails.add(detailStrings);      // Add account details to the vector
+            accountBalance.add(0);                  // Add initial balance to the vector
+            transactionHistory.add(new Vector<String>()); // Add transaction history to the vector
             System.out.println("Account Number: " + accountDetails.size());
             System.out.println("Account created successfully");
         }
@@ -23,9 +43,10 @@ public class Bank {
         }
     }
 
+    // Method to deposit amount
     public void deposit(int amount){
         try{
-            accountNumber = getAccountNumber();
+            accountNumber = getAccountNumber(); // Get account number
 
             if(accountNumber < 1 || accountNumber > accountDetails.size()){
                 throw new Exception("Invalid account number");
@@ -34,9 +55,9 @@ public class Bank {
                 throw new Exception("Amount should be greater than 0");
             }
 
-            accountBalance.add(accountNumber - 1, accountBalance.get(accountNumber - 1) + amount);
+            accountBalance.add(accountNumber - 1, accountBalance.get(accountNumber - 1) + amount);      // Update account balance
             String transaction = "+" + amount + "," + accountBalance.get(accountNumber - 1) + "," + java.time.LocalDate.now();
-            transactionHistory.get(accountNumber - 1).add(transaction);
+            transactionHistory.get(accountNumber - 1).add(transaction);                         // Update transaction history
         }
         catch(Exception e){
             System.out.println("Error in depositing amount");
@@ -44,9 +65,10 @@ public class Bank {
         System.out.println("Amount deposited successfully");
     }
 
+    // Method to withdraw amount
     public void withdraw(int amount){
         try{
-            accountNumber = getAccountNumber();
+            accountNumber = getAccountNumber();  // Get account number
 
             if(accountNumber < 1 || accountNumber > accountDetails.size()){
                 throw new Exception("Invalid account number");
@@ -58,9 +80,9 @@ public class Bank {
                 throw new Exception("Insufficient balance");
             }
 
-            accountBalance.add(accountNumber - 1, accountBalance.get(accountNumber - 1) - amount);
+            accountBalance.add(accountNumber - 1, accountBalance.get(accountNumber - 1) - amount);    // Update account balance
             String transaction = "-" + amount + "," + accountBalance.get(accountNumber - 1) + "," + java.time.LocalDate.now();
-            transactionHistory.get(accountNumber - 1).add(transaction);
+            transactionHistory.get(accountNumber - 1).add(transaction);                        // Update transaction history
         }
         catch(Exception e){
             System.out.println("Error in withdrawing amount");
@@ -68,16 +90,17 @@ public class Bank {
         System.out.println("Amount withdrawn successfully");
     }
 
+    // Method to transfer amount from one account to another
     public void bankToBankTransfer(){
         try{
-            accountNumber = getAccountNumber();
+            accountNumber = getAccountNumber(); // Get account number
 
             if(accountNumber < 1 || accountNumber > accountDetails.size()){
                 throw new Exception("Invalid account number");
             }
 
             System.out.println("Enter the account number to transfer: ");
-            int receiverAccountNumber = sc.nextInt();
+            int receiverAccountNumber = sc.nextInt();   // Get receiver account number
 
             if(receiverAccountNumber == accountNumber){
                 throw new Exception("Cannot transfer to same account");
@@ -95,8 +118,11 @@ public class Bank {
                 throw new Exception("Insufficient balance");
             }
 
+            // Update account balance of sender and receiver
             accountBalance.set(accountNumber - 1, accountBalance.get(accountNumber - 1) - amount);
             accountBalance.set(receiverAccountNumber - 1, accountBalance.get(receiverAccountNumber - 1) + amount);
+
+            // Update transaction history
             String transaction = "-" + amount + ", " + accountBalance.get(accountNumber - 1) + "," + java.time.LocalDate.now();
             transactionHistory.get(accountNumber - 1).add(transaction);
 
@@ -109,14 +135,15 @@ public class Bank {
         System.out.println("Amount transferred successfully");
     }
 
+    // Method to check balance
     public void checkBalance(){
         try{
             accountNumber = getAccountNumber();
 
-            if(accountNumber < 1 || accountNumber > accountDetails.size()){
+            if(accountNumber < 1 || accountNumber > accountDetails.size()){ // Check if account number is valid
                 throw new Exception("Invalid account number");
             }
-            System.out.println("Balance: " + accountBalance.get(accountNumber - 1));
+            System.out.println("Balance: " + accountBalance.get(accountNumber - 1));    // Display balance
         }
         catch(Exception e){
             System.out.println("Error in checking balance");
@@ -124,9 +151,11 @@ public class Bank {
         System.out.println("Balance checked successfully");
     }
 
+    // Method to set account details
     public String[] setAccountDetails(){
         String account[] = new String[4];
-        try{
+        try{    
+            // Get account details
             System.out.println("Enter your name:");
             String name = sc.nextLine();
 
@@ -155,9 +184,10 @@ public class Bank {
         }catch(Exception e){
             System.out.println("Error in getting account details");
         }
-        return account;
+        return account; // Return account details
     }
 
+    // Method to update account details
     public void updateAccountDetails(){
         try{
             accountNumber = getAccountNumber();
@@ -165,6 +195,8 @@ public class Bank {
             if(accountNumber < 1 || accountNumber > accountDetails.size()){
                 throw new Exception("Invalid account number");
             }
+
+            // Display account details
             System.out.println("Your details are: ");
             System.out.println("Name: " + accountDetails.get(accountNumber - 1)[0]);
             System.out.println("Age: " + accountDetails.get(accountNumber - 1)[1]);
@@ -173,6 +205,8 @@ public class Bank {
 
             System.out.println("Do you wish to update your details? (Y/N): ");
             char choice = sc.next().charAt(0);
+
+            // Update account details if choice is Y/y
             if(choice == 'Y' || choice == 'y'){
                 String[] detailStrings = setAccountDetails();
                 accountDetails.set(accountNumber - 1, detailStrings);
@@ -188,14 +222,17 @@ public class Bank {
         return;
     }
 
+    // Method to delete account
     public void deleteAccount(){
+        // Get account number
         accountNumber = getAccountNumber();
         try{
             if(accountNumber < 1 || accountNumber > accountDetails.size()){
                 throw new Exception("Invalid account number");
             }
-            accountDetails.remove(accountNumber - 1);
-            accountBalance.remove(accountNumber - 1);
+            accountDetails.remove(accountNumber - 1);       // Remove account details
+            accountBalance.remove(accountNumber - 1);       // Remove account balance
+            transactionHistory.remove(accountNumber - 1);   // Remove transaction history
         }
         catch(Exception e){
             System.out.println("Error in deleting account");
@@ -203,6 +240,7 @@ public class Bank {
         System.out.println("Account deleted successfully");
     }
 
+    // Method to display account details
     public void accountDetails(){
         try{
             System.out.println("Enter your account number: ");
@@ -221,12 +259,14 @@ public class Bank {
         System.out.println("Account details displayed successfully");
     }
 
+    //  Method to get account number
     public int getAccountNumber(){
         System.out.println("Enter your account number: ");
         accountNumber = sc.nextInt();
         return accountNumber;
     }
 
+    // Method to display transaction history
     public void transactionHistory(){
         try{
             accountNumber = getAccountNumber();
@@ -235,7 +275,11 @@ public class Bank {
                 throw new Exception("Invalid account number");
             }
             System.out.println("Transaction history: ");
+
+            // Display transaction history in tabular format
             System.out.println("Amount" + "\t\t" + "Balance" + "\t\t" + "Date");
+
+            // Display particular account transaction history
             for(int i = 0; i < transactionHistory.get(accountNumber - 1).size(); i++){
                 String[] transaction = transactionHistory.get(accountNumber - 1).get(i).split(",");
                 for(int j = 0; j < transaction.length; j++){
@@ -250,7 +294,11 @@ public class Bank {
     }
 
     public static void main(String[] args) {
+        // Main method to run the banking system
+        // Object of Bank class
         Bank bank = new Bank();
+
+        // Menu driven program
         int option;
         int amount;
         do{
@@ -268,6 +316,7 @@ public class Bank {
             System.out.println("Enter your choice: ");
             option = sc.nextInt();
 
+            // Switch case to perform operations based on user choice
             switch(option){
                 case 1:
                     bank.createAccount();
