@@ -106,7 +106,6 @@ import java.util.Scanner;
                 System.out.println("False");
                 CountFrequency(parentString, childString);
             }
-
         } catch (IllegalArgumentException e) {
             // Handle empty string exception
             System.out.println("Strings cannot be empty");
